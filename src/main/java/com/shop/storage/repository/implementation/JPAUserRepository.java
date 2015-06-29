@@ -5,6 +5,7 @@ import com.shop.storage.entity.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -19,45 +20,65 @@ import org.springframework.stereotype.Repository;
 public class JPAUserRepository implements UserRepository {
 
     @PersistenceContext
-    private EntityManager manager;
-    private static final Logger logger = LogManager.getLogger();
+    private EntityManager entityManager;
 
-    public List<User> getAllCustomers() {
-        return null;
+    @Override
+    public Long save(User user) {
+        entityManager.persist(user);
+        return user.getId();
     }
 
-    public void addCustomer(User user) {
-        user.setPass(getEncodedString(user.getPass()));
-        manager.persist(user);
+    @Override
+    public Long update(User user) {
+        entityManager.merge(user);
+        return user.getId();
     }
 
-    public void updateCustomer(User user) {
-
+    @Override
+    public boolean delete(User user) {
+        entityManager.remove(user);
+        return true;
     }
 
-    public List<User> getCustomersByName() {
-        return null;
+    @Override
+    public User getUserById(Long id) {
+        return entityManager.find(User.class, id);
     }
 
-    private String getDecodedString(String str) {
-        String rez = null;
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            rez = new String(messageDigest.digest(str.getBytes()));
-        } catch (NoSuchAlgorithmException e) {
-            logger.error(e);
-        }
-        return rez;
+    @Override
+    public User getUserByUsername(String username) {
+        TypedQuery<User> query = entityManager.createNamedQuery("User.findByUsername", User.class);
+        query.setParameter("name", username);
+        return query.getSingleResult();
     }
 
-    private String getEncodedString(String str) {
-        String rez = null;
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            rez = new String(messageDigest.digest(str.getBytes()));
-        } catch (NoSuchAlgorithmException e) {
-            logger.error(e);
-        }
-        return rez;
+    @Override
+    public List<User> getAllUsers(int startingResult, int resultsCount) {
+        TypedQuery<User> query = entityManager.createNamedQuery("User.findAll", User.class);
+        query.setFirstResult(startingResult);
+        query.setMaxResults(resultsCount);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<User> getUsersByPartOfName(String name, int startingResult, int resultsCount) {
+        TypedQuery<User> query = entityManager.createNamedQuery("User.findByPartOfName", User.class);
+        query.setParameter("code", "%" + name + "%");
+        query.setFirstResult(startingResult);
+        query.setMaxResults(resultsCount);
+        return query.getResultList();
+    }
+
+    @Override
+    public Long getTotalAllUsers() {
+        TypedQuery<Long> query = entityManager.createNamedQuery("User.findAll", Long.class);
+        return query.getResultList().get(0);
+    }
+
+    @Override
+    public Long getTotalUsersByName(String name) {
+        TypedQuery<Long> query = entityManager.createNamedQuery("User.findByPartOfName", Long.class);
+        query.setParameter("code", "%" + name + "%");
+        return query.getResultList().get(0);
     }
 }

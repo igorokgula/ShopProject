@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
 /**
  * Created by Igor on 25.06.2015.
  */
-public enum Status {
+public enum OrderStatus {
     DELIVERED("delivered"),
 
     CANCELED("canceled"),
@@ -16,15 +16,15 @@ public enum Status {
 
     private String name;
 
-    private Status(String name){
+    private OrderStatus(String name){
         this.name = name;
     }
 
-    private static final Map<String, Status> map =
-            new HashMap<String, Status>();
+    private static final Map<String, OrderStatus> map =
+            new HashMap<String, OrderStatus>();
 
     static {
-        for (Status type : Status.values()) {
+        for (OrderStatus type : OrderStatus.values()) {
             map.put(type.name, type);
         }
     }
@@ -33,7 +33,7 @@ public enum Status {
         return name;
     }
 
-    public static Status fromString(String name) {
+    public static OrderStatus fromString(String name) {
         if (map.containsKey(name)) {
             return map.get(name);
         }

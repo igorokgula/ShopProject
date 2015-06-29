@@ -1,5 +1,6 @@
 package com.shop.storage.entity;
 
+import com.shop.storage.enums.ProductStatus;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -34,6 +35,7 @@ public class Product {
     private String brandName;
     private String description;
     private BigDecimal price;
+    private ProductStatus productStatus;
     private Order order;
 
     public Product() {
@@ -85,6 +87,15 @@ public class Product {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    @Column(name = "product_status")
+    public ProductStatus getProductStatus() {
+        return productStatus;
+    }
+
+    public void setProductStatus(ProductStatus productStatus) {
+        this.productStatus = productStatus;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)

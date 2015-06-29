@@ -14,7 +14,7 @@ public interface UserRepository {
     public User getUserById(Long id);
     public User getUserByUsername(String username);
     public List<User> getAllUsers(int startingResult, int resultsCount);
-    public List<User> getUsersByName(String name, int startingResult, int resultsCount);
+    public List<User> getUsersByPartOfName(String name, int startingResult, int resultsCount);
     public Long getTotalAllUsers();
     public Long getTotalUsersByName(String name);
 }

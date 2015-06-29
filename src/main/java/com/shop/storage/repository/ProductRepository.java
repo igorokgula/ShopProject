@@ -13,12 +13,13 @@ public interface ProductRepository {
     public Long save(Product product);
     public Long update(Product product);
     public boolean delete(Product product);
-    public Product getProductByName();
+    public Product getById(Long id);
     public List<Product> getAllProducts(int startingResult, int resultsCount);
     public List<Product> getProductsByName(String name,int startingResult, int resultsCount);
     public List<Product> getProductsByBrandName(String brandName, int startingResult, int resultsCount);
+    public List<Product> getProductsPriceBetween(BigDecimal low, BigDecimal high, int startingResult, int resultsCount);
     public Long getTotalAllProducts();
     public Long getTotalProductsByName(String name);
     public Long getTotalProductsByBrandName(String brandName);
-    public Long getTotalProductsPriceBetween(BigDecimal low, BigDecimal hight);
+    public Long getTotalProductsPriceBetween(BigDecimal low, BigDecimal high);
 }

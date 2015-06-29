@@ -1,5 +1,6 @@
 package com.shop.storage.entity;
 
+import com.shop.storage.enums.Role;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -17,6 +18,10 @@ import java.util.List;
         @NamedQuery(name = "User.findByUsername",
                 query = "SELECT u FROM User u WHERE u.name = :name"),
         @NamedQuery(name = "User.findByPartOfName",
+                query = "SELECT u FROM User u WHERE u.name LIKE :code"),
+        @NamedQuery(name = "User.findTotalAll",
+                query = "SELECT u FROM User u"),
+        @NamedQuery(name = "User.findTotalByPartOfName",
                 query = "SELECT u FROM User u WHERE u.name LIKE :code")})
 public class User {
 
@@ -25,6 +30,7 @@ public class User {
     private String pass;
     private String address;
     private Integer age;
+    private Role role;
     private List<Order> orders;
 
     public User() {
@@ -77,6 +83,15 @@ public class User {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    @Column(name = "role")
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @OneToMany(fetch = FetchType.LAZY)
